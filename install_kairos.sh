@@ -27,3 +27,38 @@ run scripts/os-release.sh
 run scripts/firewall.sh
 run scripts/conf-hora.sh
 echo "==> KairOS configurado."
+echo "==> Instalando servicio de primer arranque..."
+
+cat > /etc/systemd/system/kairos-firstboot.service << 'EOF'
+[Unit]
+Description=KairOS First Boot Configuration
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/kairos-firstboot.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat > /usr/local/bin/kairos-firstboot.sh << 'EOF'
+#!/bin/bash
+set -e
+
+LOG="/var/log/kairos-firstboot.log"
+
+echo "==> Primer arranque de KairOS" | tee -a "$LOG"
+
+if command -v ufw &>/dev/null; then
+  ufw --force enable || true
+fi
+
+touch /etc/kairos-firstboot.done
+systemctl disable kairos-firstboot.service
+EOF
+
+chmod +x /usr/local/bin/kairos-firstboot.sh
+systemctl enable kairos-firstboot.service
+echo "==> Servicio de primer arranque instalado."

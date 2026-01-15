@@ -29,25 +29,6 @@ cd /root/KairOS
 bash install_kairos.sh
 
 
-# Crear servicio firstboot
-cat > /etc/systemd/system/kairos-firstboot.service << 'SERVICE'
-[Unit]
-Description=KairOS First Boot Setup
-After=graphical.target
-
-[Service]
-Type=oneshot
-ExecStart=/root/KairOS/scripts/firstboot.sh
-RemainAfterExit=yes
-
-[Install]
-WantedBy=graphical.target
-SERVICE
-
-# Permisos y habilitar
-chmod 644 /etc/systemd/system/kairos-firstboot.service
-systemctl enable kairos-firstboot.service
-
 echo "==> Instalando GRUB"
 if ! bash installer/grub.sh; then
   echo "❌ GRUB falló — sistema no arrancable"
