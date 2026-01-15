@@ -6,6 +6,7 @@ PROFILE="${KAIROS_PROFILE:-none}"
 
 echo "==> Perfil educativo seleccionado: $PROFILE"
 
+pacman -Sy --noconfirm archlinux-keyring
 pacman -Syu --noconfirm
 
 # Paquetes comunes (siempre)

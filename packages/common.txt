@@ -7,7 +7,6 @@
 ### SISTEMA BASE
 vim
 htop
-neofetch
 wget
 curl
 git
@@ -18,7 +17,7 @@ network-manager-applet
 avahi
 openssh
 
-### GNOME MINIMAL (SIN EXTRAS)
+### GNOME MINIMAL
 gdm
 gnome-shell
 gnome-control-center
@@ -26,14 +25,14 @@ gnome-calculator
 nautilus
 gnome-keyring
 gnome-shell-extensions
-gnome-extensions
+gnome-extensions-app
 seahorse
 xdg-user-dirs
 xdg-utils
 xdg-desktop-portal
 xdg-desktop-portal-gtk
 
-### AUDIO / VIDEO
+### AUDIO
 pipewire
 pipewire-alsa
 pipewire-pulse
