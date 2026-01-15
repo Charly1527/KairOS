@@ -11,6 +11,7 @@ wget
 curl
 git
 ufw
+terminator
 
 ### RED
 networkmanager
