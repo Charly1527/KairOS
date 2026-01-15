@@ -3,3 +3,8 @@ freecad                   # Dibujo técnico
 inkscape-extension-dxf    # Para tecnología
 jupyterlab                # Ciencias/programación
 godot-bin                 # Crear videojuegos
+geogebra
+gimp
+inkscape
+vlc
+python

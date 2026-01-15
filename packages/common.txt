@@ -4,13 +4,7 @@
 # Fecha: 16/12/2025
 # Creado por: Trinovara Tech
 # ===============================
-
-### SISTEMA BASE (mínimo y seguro)
-# base
-# linux
-# linux-firmware
-# sudo
-# nano
+### SISTEMA BASE
 vim
 htop
 neofetch
@@ -18,13 +12,13 @@ wget
 curl
 git
 
-### RED Y SERVICIOS BÁSICOS
+### RED
 networkmanager
 network-manager-applet
 avahi
 openssh
 
-### GNOME (MINIMAL, SIN EXTRAS)
+### GNOME MINIMAL (SIN EXTRAS)
 gdm
 gnome-shell
 gnome-control-center
@@ -32,14 +26,14 @@ gnome-calculator
 nautilus
 gnome-keyring
 gnome-shell-extensions
-gnome-extensions-app
+gnome-extensions
 seahorse
 xdg-user-dirs
 xdg-utils
 xdg-desktop-portal
 xdg-desktop-portal-gtk
 
-### AUDIO Y VIDEO (PIPEWIRE, LIMPIO)
+### AUDIO / VIDEO
 pipewire
 pipewire-alsa
 pipewire-pulse
@@ -59,24 +53,6 @@ system-config-printer
 bluez
 bluez-utils
 
-### OFIMÁTICA
-# ONLYOFFICE se instala vía AUR (no aquí)
-
-### EDUCACIÓN / ESCOLAR
-firefox
-vlc
-gimp
-inkscape
-scratch
-geogebra
-python
-python-pip
-python-jupyter
-thonny
-
-### DESARROLLO
-code
-
 ### SISTEMA DE ARCHIVOS
 ntfs-3g
 exfatprogs
@@ -85,7 +61,7 @@ gvfs
 gvfs-mtp
 gvfs-smb
 
-### FUENTES Y TEMAS
+### FUENTES
 noto-fonts
 noto-fonts-emoji
 ttf-dejavu
@@ -98,3 +74,6 @@ p7zip
 unzip
 evince
 eog
+
+### NAVEGADOR
+firefox

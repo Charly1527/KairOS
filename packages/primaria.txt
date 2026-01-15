@@ -4,3 +4,6 @@ tuxtype                   # Mecanografía
 childsplay                # Juegos educativos
 minetest                  # Minecraft educativo
 scratch2                  # Scratch versión 2 (algunos prefieren)
+geogebra
+vlc
+gimp

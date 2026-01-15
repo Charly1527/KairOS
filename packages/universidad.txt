@@ -2,3 +2,9 @@ blender
 godot-bin
 arduino-ide-bin     
 freecad
+python
+python-pip
+jupyterlab
+inkscape
+gimp
+vlc

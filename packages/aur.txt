@@ -2,3 +2,5 @@ onlyoffice-bin
 google-chrome   
 inkscape-extension-dxf    
 yay
+thonny
+code

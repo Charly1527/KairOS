@@ -4,3 +4,9 @@ qgis                      # Geografía
 processing                # Programación avanzada
 masterpdfeditor-free      # Editar PDFs de trabajos
 shotcut                   # Editar video
+python
+python-pip
+jupyterlab
+gimp
+inkscape
+vlc
