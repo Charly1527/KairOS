@@ -1,0 +1,6 @@
+gcompris                  # Suite educativa infantil (EXCELENTE)
+tuxmath                   # Matemáticas con Tux
+tuxtype                   # Mecanografía
+childsplay                # Juegos educativos
+minetest                  # Minecraft educativo
+scratch2                  # Scratch versión 2 (algunos prefieren)

@@ -1,0 +1,5 @@
+arduino-ide-bin           # Tecnología/robótica
+freecad                   # Dibujo técnico
+inkscape-extension-dxf    # Para tecnología
+jupyterlab                # Ciencias/programación
+godot-bin                 # Crear videojuegos

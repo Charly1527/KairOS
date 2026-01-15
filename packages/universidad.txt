@@ -1,0 +1,4 @@
+blender
+godot-bin
+arduino-ide-bin     
+freecad

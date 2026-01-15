@@ -1,0 +1,10 @@
+# ===============================
+# KairOS - Paquetes x86_64
+# Fecha: 16/12/2025
+# Creado por: Trinovara Tech
+# ===============================
+
+grub
+efibootmgr
+intel-ucode
+amd-ucode

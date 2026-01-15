@@ -1,0 +1,4 @@
+onlyoffice-bin
+google-chrome   
+inkscape-extension-dxf    
+yay

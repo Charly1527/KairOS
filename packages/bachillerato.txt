@@ -1,0 +1,6 @@
+zotero                    # Trabajos de investigación
+rstudio-desktop-bin       # Estadística
+qgis                      # Geografía
+processing                # Programación avanzada
+masterpdfeditor-free      # Editar PDFs de trabajos
+shotcut                   # Editar video

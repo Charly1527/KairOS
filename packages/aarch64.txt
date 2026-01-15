@@ -1,0 +1,7 @@
+# ===============================
+# KairOS - Paquetes aarch64
+# Fecha: 16/12/2025
+# Creado por: Trinovara Tech
+# ===============================
+
+# Firmware y utilidades específicas Raspberry
