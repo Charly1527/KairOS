@@ -11,6 +11,7 @@ pacman -Syu --noconfirm
 
 # Paquetes comunes (siempre)
 pacman -S --needed --noconfirm $(grep -v '^#' "$PACKAGE_DIR/common.txt")
+pacman -Ss --needed --noconfirm gnome-extensions-app
 
 # Arquitectura
 ARCH=$(uname -m)

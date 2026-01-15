@@ -16,3 +16,4 @@ bash scripts/extensions.sh
 bash scripts/os-release.sh
 bash scripts/firewall.sh
 bash scripts/conf-hora.sh
+echo "==> KairOS configurado."
