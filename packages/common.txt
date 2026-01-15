@@ -27,6 +27,8 @@ gnome-calculator
 nautilus
 gnome-keyring
 gnome-shell-extensions
+gnome-software
+gnome-packagekit
 seahorse
 xdg-user-dirs
 xdg-utils
