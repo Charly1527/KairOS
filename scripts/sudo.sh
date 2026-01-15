@@ -3,10 +3,8 @@ set -e
 
 echo "==> Configurando sudo..."
 
-cat <<EOF > /etc/sudoers.d/kairos
-%wheel ALL=(ALL) ALL
-EOF
+echo "%wheel ALL=(ALL) ALL" > /etc/sudoers.d/wheel
+chmod 440 /etc/sudoers.d/wheel
+echo "==> Sudo configurado correctamente"
 
-chmod 440 /etc/sudoers.d/kairos
-
-echo -e "[User]\nSystemAccount=true" > /var/lib/AccountsService/users/zeus
+# echo -e "[User]\nSystemAccount=true" > /var/lib/AccountsService/users/zeus

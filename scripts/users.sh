@@ -3,25 +3,21 @@ set -e
 
 echo "==> Configurando usuarios de KairOS..."
 
-# Grupo educativo
-groupadd -f Mortales
+groupadd -f mortales
 
-# Usuario alumno
-if ! id kairos &>/dev/null; then
-  useradd -m -s /bin/bash -G Mortales,audio,video,input kairos
-  echo "kairos:kairos" | chpasswd
-fi
+create_user() {
+  local user=$1
+  local groups=$2
+  local pass=$3
 
-# Usuario administrador
-if ! id hera &>/dev/null; then
-  useradd -m -s /bin/bash -G wheel,audio,video,input,lp,lpadmin hera
-  echo "hera:hera" | chpasswd
-fi
+  if ! id "$user" &>/dev/null; then
+    useradd -m -s /bin/bash -G "$groups" "$user"
+    echo "$user:$pass" | chpasswd
+  fi
+}
 
-# Superusuario
-if ! id zeus &>/dev/null; then
-  useradd -m -s /bin/bash -G wheel zeus
-  echo "zeus:zeus" | chpasswd
-fi
+create_user kairos "mortales,audio,video,input,storage" kairos
+create_user hera   "wheel,audio,video,input,lp,lpadmin,storage" hera
+create_user zeus   "wheel,audio,video,input,storage" zeus
 
-echo "==> Usuarios creados / verificados correctamente"
+echo "==> Usuarios creados correctamente"

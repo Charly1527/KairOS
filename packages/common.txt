@@ -10,6 +10,7 @@ htop
 wget
 curl
 git
+ufw
 
 ### RED
 networkmanager

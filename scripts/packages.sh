@@ -9,11 +9,9 @@ echo "==> Perfil educativo seleccionado: $PROFILE"
 pacman -Sy --noconfirm archlinux-keyring
 pacman -Syu --noconfirm
 
-# Paquetes comunes (siempre)
+echo "==> Instalando paquetes comunes"
 pacman -S --needed --noconfirm $(grep -v '^#' "$PACKAGE_DIR/common.txt")
-pacman -Ss --needed --noconfirm gnome-extensions-app
 
-# Arquitectura
 ARCH=$(uname -m)
 
 if [[ "$ARCH" == "x86_64" && -f "$PACKAGE_DIR/x86_64.txt" ]]; then
@@ -22,40 +20,18 @@ elif [[ "$ARCH" == "aarch64" && -f "$PACKAGE_DIR/aarch64.txt" ]]; then
   pacman -S --needed --noconfirm $(grep -v '^#' "$PACKAGE_DIR/aarch64.txt")
 fi
 
-# Perfiles educativos
 case "$PROFILE" in
-  none)           LEVELS=() ;;
-  primaria)       LEVELS=("primaria") ;;
-  secundaria)     LEVELS=("secundaria") ;;
-  bachillerato)   LEVELS=("bachillerato") ;;
-  universidad)    LEVELS=("universidad") ;;
-  todos|*)        LEVELS=("primaria" "secundaria" "bachillerato" "universidad") ;;
+  none) LEVELS=() ;;
+  primaria|secundaria|bachillerato|universidad)
+    LEVELS=("$PROFILE") ;;
+  *) LEVELS=("primaria" "secundaria" "bachillerato" "universidad") ;;
 esac
 
 for nivel in "${LEVELS[@]}"; do
   FILE="$PACKAGE_DIR/$nivel.txt"
   if [[ -f "$FILE" ]]; then
-    echo "==> Instalando paquetes: $nivel"
     pacman -S --needed --noconfirm $(grep -v '^#' "$FILE")
   fi
 done
-
-# AUR
-if [[ -f "$PACKAGE_DIR/aur.txt" ]]; then
-  if ! command -v yay &>/dev/null; then
-    useradd -m builder
-    echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-    su - builder -c "
-      git clone https://aur.archlinux.org/yay.git
-      cd yay
-      makepkg -si --noconfirm
-    "
-
-    userdel -r builder
-  fi
-
-  yay -S --needed --noconfirm $(grep -v '^#' "$PACKAGE_DIR/aur.txt")
-fi
 
 echo "==> Paquetes instalados correctamente"
