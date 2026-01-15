@@ -2,6 +2,7 @@
 set -e
 
 echo "=== Instalador KairOS ==="
+loadkeys la-latin1
 
 source installer/detect.sh
 source installer/partition.sh
@@ -26,7 +27,12 @@ echo "root:kairos" | chpasswd
 
 cd /root/KairOS
 bash install_kairos.sh
-bash installer/grub.sh
+echo "==> Instalando GRUB"
+if ! bash installer/grub.sh; then
+  echo "❌ GRUB falló — sistema no arrancable"
+  exit 1
+fi
+
 EOF
 
 echo "Instalación completa"

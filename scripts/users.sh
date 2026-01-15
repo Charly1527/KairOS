@@ -3,7 +3,15 @@ set -e
 
 echo "==> Configurando usuarios de KairOS..."
 
-groupadd -f mortales
+# Función segura para grupos
+ensure_group() {
+  getent group "$1" >/dev/null || groupadd "$1"
+}
+
+# Grupos necesarios
+for g in mortales wheel audio video input storage lp lpadmin; do
+  ensure_group "$g"
+done
 
 create_user() {
   local user=$1
