@@ -83,6 +83,41 @@ apt update
 apt upgrade -y
 
 echo "======================================"
+echo "FASE 1.1: Idioma y localización"
+echo "======================================"
+# -------------------------------
+# FASE X: Idioma y localización (Español MX)
+# -------------------------------
+phase "Configurando idioma del sistema (Español)"
+
+apt install -y locales locales-all
+
+sed -i 's/^# es_MX.UTF-8 UTF-8/es_MX.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen
+
+locale-gen
+
+cat <<EOF > /etc/default/locale
+LANG=es_MX.UTF-8
+LANGUAGE=es_MX:es_ES:es
+LC_ALL=es_MX.UTF-8
+EOF
+
+export LANG=es_MX.UTF-8
+export LC_ALL=es_MX.UTF-8
+
+# Teclado español latino
+cat <<EOF > /etc/default/keyboard
+XKBMODEL="pc105"
+XKBLAYOUT="latam"
+XKBVARIANT=""
+XKBOPTIONS=""
+EOF
+
+dpkg-reconfigure -f noninteractive keyboard-configuration
+
+
+echo "======================================"
 echo "FASE 2: Paquetes comunes"
 echo "======================================"
 
@@ -127,6 +162,27 @@ groupadd -f mortales
 create_user "$STUDENT" "mortales,audio,video,plugdev" kairos
 create_user "$TEACHER" "sudo,audio,video,plugdev" hera
 create_user "$ADMIN"   "sudo,audio,video,plugdev" zeus
+
+echo "======================================"
+echo "FASE 5.1: Restricción usuario alumno"
+echo "======================================"
+# -------------------------------
+# FASE X: Restricción de usuario alumno
+# -------------------------------
+phase "Aplicando restricciones al usuario alumno"
+
+STUDENT_HOME="/home/kairos"
+
+# Permisos correctos del home
+chmod 750 "$STUDENT_HOME"
+chown -R kairos:mortales "$STUDENT_HOME"
+
+# Evitar que liste otros homes
+chmod 750 /home
+
+# Asegurar carpetas estándar
+sudo -u kairos xdg-user-dirs-update
+
 
 echo "======================================"
 echo "FASE 6: Branding visual"
