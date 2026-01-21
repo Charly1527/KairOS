@@ -1,10 +1,9 @@
 # ===============================
-# KairOS - Paquetes comunes
-# Compatible: x86_64 / aarch64
-# Fecha: 16/12/2025
-# Creado por: Trinovara Tech
+# KairOS - Paquetes comunes (Debian)
+# Raspberry Pi OS 64-bit
 # ===============================
-### SISTEMA BASE
+
+# SISTEMA
 vim
 htop
 wget
@@ -12,50 +11,31 @@ curl
 git
 ufw
 terminator
+neofetch
 
-### RED
-networkmanager
-network-manager-applet
-avahi
-openssh
+# RED
+network-manager
+network-manager-gnome
+avahi-daemon
+openssh-server
 
-### GNOME MINIMAL
-gdm
-gnome-shell
-gnome-control-center
-gnome-calculator
-nautilus
-gnome-keyring
-gnome-shell-extensions
-gnome-software
-gnome-packagekit
-seahorse
-xdg-user-dirs
-xdg-utils
-xdg-desktop-portal
-xdg-desktop-portal-gtk
-
-### AUDIO
+# AUDIO / VIDEO
 pipewire
 pipewire-alsa
 pipewire-pulse
-pipewire-jack
 wireplumber
 pavucontrol
+vlc
 
-### GRÁFICOS
-mesa
-
-### IMPRESIÓN
+# IMPRESIÓN
 cups
 cups-filters
 system-config-printer
 
-### BLUETOOTH
+# BLUETOOTH
 bluez
-bluez-utils
 
-### SISTEMA DE ARCHIVOS
+# SISTEMA DE ARCHIVOS
 ntfs-3g
 exfatprogs
 dosfstools
@@ -63,19 +43,12 @@ gvfs
 gvfs-mtp
 gvfs-smb
 
-### FUENTES
-noto-fonts
-noto-fonts-emoji
-ttf-dejavu
-ttf-liberation
-papirus-icon-theme
-
-### UTILIDADES
+# UTILIDADES
 file-roller
-p7zip
+p7zip-full
 unzip
 evince
 eog
 
-### NAVEGADOR
-firefox
+# NAVEGADOR
+firefox-esr

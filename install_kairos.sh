@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export KAIROS_PROFILE="none"
+export KAIROS_PROFILE="universidad"
 
 echo "==> Configurando KairOS..."
 loadkeys la-latin1

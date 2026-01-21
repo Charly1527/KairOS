@@ -1,10 +1,10 @@
+# KairOS - Perfil Universidad
+
 blender
-godot-bin
-arduino-ide-bin     
 freecad
-python
-python-pip
-jupyterlab
+godot3
+arduino
 inkscape
 gimp
-vlc
+python3
+python3-pip

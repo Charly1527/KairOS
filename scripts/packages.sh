@@ -2,7 +2,7 @@
 set -e
 
 PACKAGE_DIR="/root/KairOS/packages"
-PROFILE="${KAIROS_PROFILE:-none}"
+PROFILE="${KAIROS_PROFILE:-universidad}"
 
 echo "==> Perfil educativo seleccionado: $PROFILE"
 
