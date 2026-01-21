@@ -4,117 +4,198 @@ set -e
 echo "======================================"
 echo "   KairOS Beta - Setup Universitario"
 echo "   Raspberry Pi OS 64-bit"
+echo "   Fecha: $(date)"
+echo "   Autor: Chars"
+echo "======================================"
+
+echo "======================================"
+echo "Verificación root"
 echo "======================================"
 
 if [[ $EUID -ne 0 ]]; then
-  echo "Ejecuta con sudo"
+  echo "❌ Ejecuta con sudo"
   exit 1
 fi
 
+# -------------------------------
+# Variables
+# -------------------------------
 ADMIN="zeus"
 STUDENT="kairos"
 TEACHER="hera"
 
 BASE_DIR="$(pwd)"
 PKG_DIR="$BASE_DIR/packages"
+KAIROS_DIR="/usr/share/kairos"
+WALL_DIR="/usr/share/rpd-wallpaper"
 
-# --------------------------------
-# Sistema base
-# --------------------------------
+USERS=("$ADMIN" "$STUDENT" "$TEACHER")
+
+# -------------------------------
+# Funciones
+# -------------------------------
+phase() {
+  echo ""
+  echo "▶▶▶ $1"
+  echo "--------------------------------------"
+}
+
+install_packages_from_file() {
+  local file="$1"
+
+  if [[ ! -f "$file" ]]; then
+    echo "⚠️ Archivo no encontrado: $file"
+    return
+  fi
+
+  while IFS= read -r pkg; do
+    [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
+
+    if apt-cache show "$pkg" &>/dev/null; then
+      echo "   ✔ $pkg"
+      apt install -y "$pkg"
+    else
+      echo "   ⚠️ Paquete no disponible: $pkg (omitido)"
+    fi
+  done < "$file"
+}
+
+create_user() {
+  local user="$1"
+  local groups="$2"
+  local pass="$3"
+
+  if ! id "$user" &>/dev/null; then
+    echo "Creando usuario $user"
+    useradd -m -s /bin/bash -G "$groups" "$user"
+    echo "$user:$pass" | chpasswd
+  else
+    echo "Usuario $user ya existe"
+  fi
+}
+
+echo "======================================"
+echo "FASE 1: Sistema base"
+echo "======================================"
+
+phase "Actualizando sistema base"
 apt update
 apt upgrade -y
 
-# --------------------------------
-# Instalar paquetes comunes
-# --------------------------------
-echo "==> Instalando paquetes comunes..."
-xargs -a "$PKG_DIR/common.txt" apt install -y
+echo "======================================"
+echo "FASE 2: Paquetes comunes"
+echo "======================================"
 
-# --------------------------------
-# Perfil Universidad
-# --------------------------------
-echo "==> Instalando perfil Universidad..."
-xargs -a "$PKG_DIR/universidad.txt" apt install -y
-pip3 install --break-system-packages jupyterlab
+phase "Instalando paquetes comunes"
+apt install -y fastfetch
+install_packages_from_file "$PKG_DIR/common.txt"
 
-# --------------------------------
-# Servicios
-# --------------------------------
+echo "======================================"
+echo "FASE 3: Perfil Universidad"
+echo "======================================"
+
+phase "Instalando perfil Universidad"
+install_packages_from_file "$PKG_DIR/universidad.txt"
+
+if ! command -v jupyter-lab &>/dev/null; then
+  pip3 install --break-system-packages jupyterlab
+fi
+
+echo "======================================"
+echo "FASE 4: Servicios"  
+echo "======================================"
+
+phase "Habilitando servicios"
 systemctl enable ssh
 systemctl enable cups
 systemctl enable avahi-daemon
 systemctl enable ufw
 
-ufw default deny incoming
-ufw default allow outgoing
-ufw allow ssh
-ufw --force enable
+ufw default deny incoming || true
+ufw default allow outgoing || true
+ufw allow ssh || true
+ufw --force enable || true
 
-# --------------------------------
-# Usuarios
-# --------------------------------
+echo "======================================"
+echo "FASE 5: Usuarios"
+echo "======================================"
+
+phase "Configurando usuarios"
+
 groupadd -f mortales
-
-create_user() {
-  if ! id "$1" &>/dev/null; then
-    useradd -m -s /bin/bash -G "$2" "$1"
-    echo "$1:$3" | chpasswd
-  fi
-}
 
 create_user "$STUDENT" "mortales,audio,video,plugdev" kairos
 create_user "$TEACHER" "sudo,audio,video,plugdev" hera
+create_user "$ADMIN"   "sudo,audio,video,plugdev" zeus
 
-# --------------------------------
-# Branding visual
-# --------------------------------
-WALL="/usr/share/rpd-wallpaper"
+echo "======================================"
+echo "FASE 6: Branding visual"
+echo "======================================"
 
-cp branding/wallpapers/kairos-wallpaper.jpg "$WALL/" || true
-cp branding/wallpapers/kairos-login.jpg "$WALL/" || true
+phase "Aplicando branding KairOS"
 
-sed -i "s|^wallpaper=.*|wallpaper=$WALL/kairos-login.jpg|" \
+mkdir -p "$KAIROS_DIR"
+cp -r branding/* "$KAIROS_DIR/" || true
+
+cp "$KAIROS_DIR/wallpapers/kairos-wallpaper.jpg" "$WALL_DIR/" || true
+cp "$KAIROS_DIR/wallpapers/kairos-login.jpg" "$WALL_DIR/" || true
+
+# Login wallpaper
+sed -i "s|^wallpaper=.*|wallpaper=$WALL_DIR/kairos-login.jpg|" \
   /etc/lightdm/pi-greeter.conf || true
 
-cp branding/icons/kairos-menu.png \
+# Icono menú
+cp "$KAIROS_DIR/icons/kairos-menu.png" \
   /usr/share/lxpanel/images/raspberrypi-menu.png || true
 
-cp branding/boot/kairos-splash.png \
+# Splash boot
+cp "$KAIROS_DIR/boot/kairos-splash.png" \
   /usr/share/plymouth/themes/pix/splash.png || true
 update-initramfs -u
 
-# --------------------------------
-# Modo oscuro + universidad
-# --------------------------------
-for u in "$ADMIN" "$STUDENT" "$TEACHER"; do
-  sudo -u "$u" dbus-launch gsettings set \
-    org.gnome.desktop.interface color-scheme 'prefer-dark' || true
-done
+echo "======================================"
+echo "FASE 7: Wallpaper por usuario"
+echo "======================================"
+phase "Configurando wallpaper por usuario"
 
-for u in "$ADMIN" "$TEACHER"; do
-  sudo -u "$u" dbus-launch gsettings set \
-    org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing' || true
-done
+for u in "${USERS[@]}"; do
+  HOME_DIR="/home/$u"
+  mkdir -p "$HOME_DIR/.config/pcmanfm/LXDE-pi"
 
-# --------------------------------
-# MOTD + neofetch
-# --------------------------------
-cat <<EOF > /etc/motd
-========================================
-   Bienvenido a KairOS Beta
-   Perfil: Universidad
-========================================
+  cat > "$HOME_DIR/.config/pcmanfm/LXDE-pi/desktop-items-0.conf" <<EOF
+[*]
+wallpaper=$WALL_DIR/kairos-wallpaper.jpg
+wallpaper_mode=stretch
+desktop_bg=#000000
 EOF
 
-cat <<'EOF' > /etc/profile.d/kairos.sh
+  chown -R "$u:$u" "$HOME_DIR/.config"
+done
+
+echo "======================================"
+echo "FASE 8: Mensaje bienvenida terminal"
+echo "======================================"
+phase "Configurando bienvenida de terminal"
+
+cat <<'EOF' > /etc/profile.d/kairos-welcome.sh
 #!/bin/bash
-neofetch
-EOF
-chmod +x /etc/profile.d/kairos.sh
+[[ $- != *i* ]] && return
 
-# --------------------------------
-# Identidad
-# --------------------------------
+echo ""
+echo "🟦 Bienvenido a KairOS Beta"
+echo "Perfil: Universidad"
+echo ""
+fastfetch
+echo ""
+EOF
+
+chmod +x /etc/profile.d/kairos-welcome.sh
+
+echo "======================================"
+echo "FASE 9: Identidad del sistema"
+echo "======================================"
+phase "Escribiendo identidad del sistema"
+
 cat <<EOF > /etc/kairos-release
 KairOS Beta
 Base: Raspberry Pi OS 64-bit
@@ -122,6 +203,9 @@ Perfil: Universidad
 Fecha: $(date)
 EOF
 
+echo ""
 echo "======================================"
-echo " KairOS listo. Reinicia el sistema."
+echo " ✅ KairOS Beta instalado correctamente"
+echo "   Gracias por usar KairOS!"
+echo " 🔁 Reinicia el sistema"
 echo "======================================"
